@@ -1,13 +1,7 @@
-/* main.js - arrays, loops, reusable functions, DOM manipulation and events */
-'use strict';
-
 const FAV_KEY = 'wanderlens:favorites';
 const THEME_KEY = 'wanderlens:theme';
-const allItems = attractions.concat(experiences); // used to look up favorites by id
+const allItems = attractions.concat(experiences); 
 
-/* ================= Reusable helper functions ================= */
-
-// Safe localStorage read (returns fallback if storage is blocked or empty)
 function readStorage(key, fallback) {
     try {
         const raw = localStorage.getItem(key);
@@ -17,12 +11,11 @@ function readStorage(key, fallback) {
     }
 }
 function writeStorage(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch (error) { /* storage unavailable */ }
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (error) { }
 }
 
 function getFavorites() { return readStorage(FAV_KEY, []); }
 
-// Returns a new array filtered by search text and category (RETURNS A VALUE)
 function filterItems(items, query, category) {
     const text = query.trim().toLowerCase();
     return items.filter(function (item) {
@@ -32,12 +25,10 @@ function filterItems(items, query, category) {
     });
 }
 
-// Returns the trip price: (price per person + extras per person) * travelers
 function calculateTotal(pricePerPerson, travelers, extrasPerPerson) {
     return (pricePerPerson + extrasPerPerson) * travelers;
 }
 
-// Bootstrap toast message with visual feedback
 function showToast(message, type) {
     let box = document.getElementById('toast-box');
     if (!box) {
@@ -54,13 +45,10 @@ function showToast(message, type) {
         '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>';
     toast.querySelector('.toast-body').textContent = message;
     box.appendChild(toast);
-    toast.addEventListener('hidden.bs.toast', function () { toast.remove(); }); // remove element from DOM
+    toast.addEventListener('hidden.bs.toast', function () { toast.remove(); });
     new bootstrap.Toast(toast, { delay: 2200 }).show();
 }
 
-/* ================= Card rendering (DOM from arrays) ================= */
-
-// Builds one card element. layout: 'vertical' (attractions/home) or 'horizontal' (experiences)
 function createCard(item, layout) {
     const isFav = getFavorites().includes(item.id);
     const col = document.createElement('div');
@@ -88,15 +76,12 @@ function createCard(item, layout) {
     return col;
 }
 
-// Clears a container and fills it with cards from an array (loop #1: forEach)
 function renderCards(items, container, layout) {
     container.innerHTML = '';
     items.forEach(function (item) {
         container.appendChild(createCard(item, layout));
     });
 }
-
-/* ================= Filtering + search (attractions / experiences) ================= */
 
 function initCatalog(items, layout) {
     const grid = document.getElementById('catalog-grid');
@@ -110,15 +95,15 @@ function initCatalog(items, layout) {
         const result = filterItems(items, search.value, activeCategory);
         renderCards(result, grid, layout);
         count.textContent = result.length + ' of ' + items.length + ' shown';
-        empty.classList.toggle('d-none', result.length > 0); // show/hide element
+        empty.classList.toggle('d-none', result.length > 0);
     }
 
-    search.addEventListener('input', update);                 // event: input
-    search.addEventListener('keydown', function (event) {     // event: keydown
+    search.addEventListener('input', update);
+    search.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') { search.value = ''; update(); }
     });
     filterButtons.forEach(function (button) {
-        button.addEventListener('click', function () {        // event: click
+        button.addEventListener('click', function () {
             filterButtons.forEach(function (b) { b.classList.remove('active'); });
             button.classList.add('active');
             activeCategory = button.dataset.category;
@@ -132,15 +117,12 @@ function initCatalog(items, layout) {
     update();
 }
 
-/* ================= Favorites (list in offcanvas, shared on all pages) ================= */
-
 function updateFavoritesUI() {
     const favorites = getFavorites();
     const badge = document.getElementById('fav-count');
     badge.textContent = favorites.length;
     badge.classList.toggle('d-none', favorites.length === 0);
 
-    // sync every heart button on the page
     document.querySelectorAll('.fav-btn').forEach(function (btn) {
         const active = favorites.includes(btn.dataset.id);
         btn.classList.toggle('active', active);
@@ -148,7 +130,6 @@ function updateFavoritesUI() {
         btn.firstElementChild.className = 'fa-' + (active ? 'solid' : 'regular') + ' fa-heart';
     });
 
-    // rebuild the list inside the panel (loop #2: for...of)
     const list = document.getElementById('favorites-list');
     list.innerHTML = '';
     for (const id of favorites) {
@@ -173,7 +154,6 @@ function toggleFavorite(id) {
     showToast(wasFav ? 'Removed from favorites' : 'Added to favorites', wasFav ? 'secondary' : 'success');
 }
 
-// Creates the favorites panel dynamically (new DOM element added to the page)
 function createFavoritesPanel() {
     const panel = document.createElement('div');
     panel.className = 'offcanvas offcanvas-end';
@@ -186,13 +166,11 @@ function createFavoritesPanel() {
         '<div class="offcanvas-body"><p id="favorites-empty" class="text-muted small">No favorites yet. Tap the heart on any attraction or experience.</p>' +
         '<ul id="favorites-list" class="list-group list-group-flush"></ul></div>';
     document.body.appendChild(panel);
-    panel.addEventListener('click', function (event) {        // event delegation + event object
+    panel.addEventListener('click', function (event) {
         const btn = event.target.closest('.remove-fav');
         if (btn) { toggleFavorite(btn.dataset.id); }
     });
 }
-
-/* ================= Theme switcher ================= */
 
 function setTheme(theme) {
     document.documentElement.setAttribute('data-bs-theme', theme);
@@ -200,8 +178,6 @@ function setTheme(theme) {
     const icon = document.querySelector('#theme-toggle i');
     if (icon) { icon.className = 'fa-solid ' + (theme === 'dark' ? 'fa-sun' : 'fa-moon'); }
 }
-
-/* ================= Page specific builders ================= */
 
 function renderDiscover() {
     const grid = document.getElementById('discover-grid');
@@ -246,7 +222,6 @@ function renderFaq() {
     });
 }
 
-// Fills <select> options and checkboxes from arrays, then wires the live price calculator
 function initPlanner() {
     const select = document.getElementById('duration');
     const group = document.getElementById('activities-group');
@@ -276,15 +251,13 @@ function initPlanner() {
         });
         display.textContent = '$' + calculateTotal(duration.price, travelers, extras);
     }
-    ['change', 'input'].forEach(function (type) {             // events: change + input
+    ['change', 'input'].forEach(function (type) {
         document.getElementById('plan-form').addEventListener(type, updateTotal);
     });
     updateTotal();
 }
 
-/* ================= Start-up ================= */
-
-document.addEventListener('DOMContentLoaded', function () {   // event: DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
     setTheme(readStorage(THEME_KEY, 'light'));
     createFavoritesPanel();
 
@@ -300,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {   // event: DOMConte
     document.getElementById('theme-toggle').addEventListener('click', function () {
         setTheme(document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
     });
-    // one delegated handler for every heart button, including cards created later
     document.addEventListener('click', function (event) {
         const btn = event.target.closest('.fav-btn');
         if (btn) { event.preventDefault(); toggleFavorite(btn.dataset.id); }
