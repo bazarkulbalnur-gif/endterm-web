@@ -1,7 +1,5 @@
-/* validation.js - custom form validation (no browser default messages) */
 'use strict';
 
-// ---- reusable validators: each returns an error message or '' when valid ----
 function checkRequired(value, label) { return value.trim() === '' ? label + ' is required.' : ''; }
 function checkMinLength(value, label, min) { return value.trim().length < min ? label + ' must contain at least ' + min + ' characters.' : ''; }
 function checkEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()) ? '' : 'Enter a valid email, for example name@mail.com.'; }
@@ -19,7 +17,6 @@ function checkFutureDate(value) {
     return new Date(value) < today ? 'Start date cannot be in the past.' : '';
 }
 
-// Shows or clears an error under a field
 function setError(fieldId, message) {
     const field = document.getElementById(fieldId);
     const box = document.getElementById(fieldId + '-error');
@@ -27,11 +24,9 @@ function setError(fieldId, message) {
     field.classList.toggle('is-valid', message === '' && field.type !== 'checkbox');
     field.setAttribute('aria-invalid', message !== '');
     box.textContent = message;
-    box.classList.toggle('d-block', message !== ''); // also works for checkbox groups
+    box.classList.toggle('d-block', message !== '');
 }
 
-// Validates a form using a rules object { fieldId: function returning message }.
-// Returns true only if every field is valid (RETURNS A VALUE)
 function validateForm(rules) {
     let valid = true;
     let firstInvalid = null;
@@ -45,7 +40,6 @@ function validateForm(rules) {
     return valid;
 }
 
-// Attach live validation: each field is checked while typing / leaving it
 function attachLiveValidation(rules) {
     Object.keys(rules).forEach(function (id) {
         const field = document.getElementById(id);
@@ -56,7 +50,6 @@ function attachLiveValidation(rules) {
 
 function val(id) { return document.getElementById(id).value; }
 
-/* ================= Contact / purchase form ================= */
 function initContactForm() {
     const form = document.getElementById('contact-form');
     const select = document.getElementById('passType');
@@ -66,7 +59,7 @@ function initContactForm() {
         option.textContent = p.name + ' ($' + p.price + ')';
         select.appendChild(option);
     });
-    const preselected = new URLSearchParams(window.location.search).get('pass'); // pass chosen on pass.html
+    const preselected = new URLSearchParams(window.location.search).get('pass');
     if (preselected) { select.value = preselected; }
 
     const rules = {
@@ -84,16 +77,15 @@ function initContactForm() {
         if (!validateForm(rules)) { showToast('Please fix the highlighted fields.', 'danger'); return; }
         const name = val('fullName').trim().split(' ')[0];
         document.getElementById('success-text').textContent = 'Thank you, ' + name + '! Your details were saved and your pass request is confirmed.';
-        $('#form-success').hide().removeClass('d-none').fadeIn(400); // jQuery effect
+        $('#form-success').hide().removeClass('d-none').fadeIn(400);
         form.reset();
         form.querySelectorAll('.is-valid').forEach(function (el) { el.classList.remove('is-valid'); });
     });
 }
 
-/* ================= Trip planner form ================= */
 function buildItinerary(days, selectedLabels) {
     const plan = [];
-    for (let day = 1; day <= days; day++) {                    // loop #3: classic for
+    for (let day = 1; day <= days; day++) {
         plan.push({ day: day, activity: selectedLabels[(day - 1) % selectedLabels.length] });
     }
     return plan;
@@ -112,7 +104,6 @@ function initPlanForm() {
         travelers: function () { return checkRange(val('travelers'), 'Travelers count', 1, 10); },
         'activities-group': function () { return document.querySelectorAll('.activity-check:checked').length === 0 ? 'Select at least one activity.' : ''; }
     };
-    // the activities group is not an input: give it a tiny shim so setError() works
     const group = document.getElementById('activities-group');
     group.type = 'group';
     ['fullName', 'email', 'startDate', 'duration', 'travelers'].forEach(function (id) {
@@ -137,7 +128,7 @@ function initPlanForm() {
         });
         document.getElementById('success-text').textContent = 'Itinerary ready for ' + val('fullName').trim() + '! Estimated total: ' + document.getElementById('total-price').textContent + '.';
         const result = $('#form-success');
-        result.hide().removeClass('d-none').slideDown(350);    // jQuery effect
+        result.hide().removeClass('d-none').slideDown(350);
         result[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 }
