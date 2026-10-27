@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
-/* ---------- Design tokens (same palette as midterm) ---------- */
 :root {
     --primary: #1a4a5a;
     --primary-hover: #123440;
@@ -41,7 +40,6 @@ html[data-bs-theme="dark"] body.page-warm { --bg: #121a1d; }
 .text-muted-brand { color: var(--muted) !important; }
 a { text-decoration: none; }
 
-/* ---------- Header / navbar ---------- */
 .wl-navbar { background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.08); padding: .9rem 0; }
 .wl-navbar .navbar-brand { display: flex; align-items: center; gap: .6rem; padding: 0; }
 .brand-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--link); line-height: 1.1; }
@@ -53,7 +51,6 @@ a { text-decoration: none; }
 .icon-btn:hover { background: var(--soft); }
 .fav-count { position: absolute; top: -4px; right: -4px; font-size: 10px; min-width: 18px; height: 18px; line-height: 18px; border-radius: 9px; background: #d9534f; color: #fff; text-align: center; font-weight: 700; }
 
-/* ---------- Buttons / badges / cards ---------- */
 .btn-wl { background: var(--primary); color: #fff; border: 0; border-radius: 50rem; font-weight: 600; font-size: 14px; padding: .6rem 1.4rem; box-shadow: 0 2px 6px rgba(0,0,0,.15); transition: all .3s ease; }
 .btn-wl:hover, .btn-wl:focus { background: var(--primary-hover); color: #fff; }
 .btn-wl-dark { background: #2b221e; color: #fff; border-radius: .75rem; font-weight: 600; font-size: 14px; padding: .75rem; border: 0; }
@@ -79,14 +76,12 @@ html[data-bs-theme="dark"] .btn-wl-dark { background: #3b4a50; }
 .link-arrow { font-size: 12px; font-weight: 700; color: var(--link); }
 .link-arrow:hover { text-decoration: underline; }
 
-/* ---------- Forms ---------- */
 .form-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
 .wl-form .form-control, .wl-form .form-select { border-radius: .75rem; padding: .75rem 1rem; font-size: 14px; }
 .wl-form .form-control:focus, .wl-form .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 .2rem rgba(26,74,90,.2); }
 .form-check-input:checked { background-color: var(--primary); border-color: var(--primary); }
 .total-box { background: var(--soft); border-radius: 1rem; padding: 1rem 1.25rem; }
 
-/* ---------- Home hero ---------- */
 .hero-overlay { background: var(--hero-overlay); }
 .glass { background: rgba(255,255,255,.9); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.5); }
 html[data-bs-theme="dark"] .glass { background: rgba(27,39,43,.88); border-color: rgba(255,255,255,.08); }
@@ -94,7 +89,6 @@ html[data-bs-theme="dark"] .glass { background: rgba(27,39,43,.88); border-color
 .stat-number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--text); }
 .stat-label { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
 
-/* ---------- Pass page / FAQ ---------- */
 .price { font-size: 2rem; font-weight: 700; color: var(--link); }
 .perk-list { list-style: none; padding: 0; font-size: 14px; color: var(--muted); }
 .perk-list li { margin-bottom: .75rem; }
@@ -105,7 +99,6 @@ html[data-bs-theme="dark"] .glass { background: rgba(27,39,43,.88); border-color
 .faq-item.open .faq-question i { transform: rotate(180deg); }
 .faq-answer { display: none; padding-bottom: 1rem; font-size: 14px; color: var(--muted); }
 
-/* ---------- Misc ---------- */
 .contact-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--soft); color: var(--link); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .itinerary-day { border-left: 3px solid var(--primary); padding-left: 1rem; margin-bottom: 1rem; }
 #back-to-top { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 1050; width: 44px; height: 44px; border-radius: 50%; padding: 0; }
@@ -119,7 +112,6 @@ main { flex: 1 0 auto; }
 @media (max-width: 767.98px) { .page-title { font-size: 2rem; } .card-img-box { height: 12rem; } }
 @media (max-width: 575.98px) { .stat-number { font-size: 1.6rem; } }
 
-/* ================= v2: always-visible sticky navbar ================= */
 .wl-sticky { position: sticky; top: 0; z-index: 1030; }
 .wl-navbar { padding: .6rem 0 0; }
 .wl-nav-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; row-gap: .25rem; }
@@ -135,7 +127,6 @@ main { flex: 1 0 auto; }
     .wl-links .nav-link { font-size: 15px; }
 }
 
-/* ================= v2: nicer look & motion ================= */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 .wl-card, .glass, .page-title, .badge-soft { animation: fadeUp .6s ease both; }
 .card-img-box img { transition: transform .5s ease; }
